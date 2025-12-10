@@ -397,24 +397,6 @@ stockit/
 └── README.md                    # This file
 ```
 
----
-
-## 🎨 Screenshots
-
-### Home Screen
-![Home Screen](screenshots/home.png)
-
-### Portfolio
-![Portfolio](screenshots/portfolio.png)
-
-### Trading
-![Trading](screenshots/trading.png)
-
-### Watchlist
-![Watchlist](screenshots/watchlist.png)
-
----
-
 ## 🔐 Security
 
 - **Password Hashing**: Bcrypt with salt rounds
