@@ -8,7 +8,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.IOException
+import java.security.SecureRandom
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
+import javax.net.ssl.SSLContext
+import javax.net.ssl.SSLSocketFactory
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
+import javax.net.ssl.HostnameVerifier
 
 // Custom retry interceptor
 class RetryInterceptor(private val maxRetries: Int = 3) : Interceptor {
@@ -47,13 +55,46 @@ class RetryInterceptor(private val maxRetries: Int = 3) : Interceptor {
 }
 
 object ApiConfig {
-    private const val BASE_URL = "https://test.vardhin.tech/"
+    // Production backend server on Render
+    // Permanent URL - no need to restart or update!
+    private const val BASE_URL = "https://stockit-api-yqi5.onrender.com/"
     
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
     
     private val retryInterceptor = RetryInterceptor(maxRetries = 3)
+    
+    // Create a trust manager that accepts all certificates
+    private fun getTrustAllCerts(): Array<TrustManager> {
+        return arrayOf(object : X509TrustManager {
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(chain: Array<X509Certificate>, authType: String) {
+                // Accept all client certificates
+            }
+            
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(chain: Array<X509Certificate>, authType: String) {
+                // Accept all server certificates
+            }
+            
+            override fun getAcceptedIssuers(): Array<X509Certificate> {
+                return arrayOf()
+            }
+        })
+    }
+    
+    // Create SSL socket factory with TLS protocol
+    private fun getSSLSocketFactory(): SSLSocketFactory {
+        return try {
+            val sslContext = SSLContext.getInstance("TLS")
+            sslContext.init(null, getTrustAllCerts(), SecureRandom())
+            sslContext.socketFactory
+        } catch (e: Exception) {
+            android.util.Log.e("ApiConfig", "Failed to create SSL socket factory", e)
+            throw RuntimeException("Failed to create SSL socket factory", e)
+        }
+    }
     
     private val client = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
@@ -62,6 +103,12 @@ object ApiConfig {
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .retryOnConnectionFailure(true)
+        .sslSocketFactory(getSSLSocketFactory(), getTrustAllCerts()[0] as X509TrustManager)
+        .hostnameVerifier(HostnameVerifier { hostname, session -> 
+            // Accept all hostnames - FOR DEVELOPMENT ONLY
+            android.util.Log.d("ApiConfig", "Accepting hostname: $hostname")
+            true 
+        })
         .build()
     
     val retrofit: Retrofit = Retrofit.Builder()

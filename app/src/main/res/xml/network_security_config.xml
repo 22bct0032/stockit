@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- Configuration for test.vardhin.tech domain -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">test.vardhin.tech</domain>
+        <domain includeSubdomains="true">vardhin.tech</domain>
+        <!-- Allow local IP for backend server -->
+        <domain includeSubdomains="true">172.17.15.89</domain>
+        <domain includeSubdomains="true">localhost</domain>
+        <domain includeSubdomains="true">10.0.2.2</domain>
+        <trust-anchors>
+            <!-- Trust system certificates -->
+            <certificates src="system" />
+            <!-- Trust user-installed certificates -->
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+    
+    <!-- Base configuration for all other domains -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- Debug overrides - allows user certificates in debug builds -->
+    <debug-overrides>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </debug-overrides>
+</network-security-config>

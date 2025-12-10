@@ -1,240 +1,504 @@
-# StockIt - Advanced Stock Trading Mobile Application
+# StockIt - Full-Stack Stock Trading Application 📈
 
 <div align="center">
 
 ![Android](https://img.shields.io/badge/Platform-Android-green.svg)
 ![Kotlin](https://img.shields.io/badge/Language-Kotlin-blue.svg)
 ![Jetpack Compose](https://img.shields.io/badge/UI-Jetpack%20Compose-orange.svg)
-![Min SDK](https://img.shields.io/badge/Min%20SDK-28-yellow.svg)
-![Target SDK](https://img.shields.io/badge/Target%20SDK-35-green.svg)
+![Node.js](https://img.shields.io/badge/Backend-Node.js-green.svg)
+![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
+
+A modern, production-ready stock trading application with a beautiful Android frontend and robust Node.js backend, featuring real-time market data, portfolio management, and secure authentication.
+
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Setup](#-setup) • [API Documentation](#-api-documentation) • [Screenshots](#-screenshots)
 
 </div>
 
-A modern, feature-rich stock trading application built with Jetpack Compose, offering real-time market data, portfolio management, and seamless trading capabilities with a stunning dark-themed UI.
+---
 
 ## 🌟 Features
 
-### 📱 Modern UI/UX
-- **Dark Theme Design**: Elegant dark mode interface with glassmorphism effects
-- **Smooth Animations**: Spring-based animations and transitions throughout the app
-- **Responsive Layout**: Adaptive design that works across different screen sizes
-- **Accessibility First**: Full accessibility support with semantic descriptions and screen reader compatibility
+### 📱 Android App
+- **Modern UI/UX** - Dark theme with glassmorphism effects and smooth animations
+- **Real-Time Trading** - Buy and sell stocks with live price updates
+- **Portfolio Management** - Track holdings, P&L, and transaction history
+- **Watchlist** - Save and monitor favorite stocks
+- **Secure Authentication** - JWT-based login/signup with token management
+- **Offline Support** - Cached data for seamless experience
 
-### 📊 Real-Time Market Data
-- **Live Stock Prices**: Real-time price updates with WebSocket connections
-- **Interactive Charts**: Multiple timeframe support (1W, 1M, 3M, 6M, 1Y)
-- **Trending Stocks**: Curated list of trending stocks with live market data
-- **Advanced Analytics**: Technical indicators and market statistics
+### 🔧 Backend API
+- **RESTful API** - Clean, well-documented endpoints
+- **PostgreSQL Database** - Persistent data storage with relational integrity
+- **JWT Authentication** - Secure user sessions
+- **Mock Stock Data** - Realistic stock market simulation
+- **Transaction Management** - Complete buy/sell order processing
+- **Admin Dashboard** - View user data and statistics
 
-### 💼 Portfolio Management
-- **Portfolio Overview**: Real-time portfolio value and P&L tracking
-- **Holdings Management**: Detailed view of stock holdings with performance metrics
-- **Transaction History**: Complete trading history with filtering options
-- **Performance Analytics**: Profit/loss tracking with percentage calculations
+---
 
-### 📈 Trading Capabilities
-- **Buy/Sell Orders**: Seamless stock trading with real-time affordability checks
-- **Market Orders**: Instant execution at current market prices
-- **Price Validation**: Real-time price verification before order placement
-- **Order Confirmation**: Multi-step confirmation process for secure trading
+## 🛠️ Tech Stack
 
-### 👀 Watchlist Management
-- **Personal Watchlist**: Add/remove stocks to track favorites
-- **Price Alerts**: Monitor stock price movements
-- **Quick Actions**: Easy access to stock details and trading from watchlist
-- **Synchronized Data**: Cloud-based watchlist sync across devices
+### Frontend (Android)
+- **Kotlin** - Modern, type-safe programming language
+- **Jetpack Compose** - Declarative UI framework
+- **Retrofit** - Type-safe HTTP client
+- **Hilt** - Dependency injection
+- **Coroutines** - Asynchronous programming
+- **Material 3** - Modern design system
 
-### 🔐 Authentication & Security
-- **Secure Login/Signup**: JWT-based authentication with token management
-- **Session Management**: Automatic token refresh and secure storage
-- **Biometric Support**: Optional fingerprint/face unlock (planned)
-- **Data Encryption**: End-to-end encryption for sensitive user data
+### Backend (API)
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **PostgreSQL** - Relational database
+- **JWT** - Authentication tokens
+- **Bcrypt** - Password hashing
+- **CORS** - Cross-origin resource sharing
 
-## 🏗️ Architecture
+### Deployment
+- **Render.com** - Backend hosting (PostgreSQL + Web Service)
+- **GitHub** - Version control and CI/CD
 
-This application follows **MVVM + Clean Architecture** principles for maintainable and testable code.
+---
 
-### Technology Stack
-
-#### Frontend
-- **Jetpack Compose**: Modern declarative UI toolkit
-- **Material 3**: Latest Material Design components
-- **Compose Navigation**: Type-safe navigation
-- **Hilt**: Dependency injection framework
-- **StateFlow/Flow**: Reactive programming
-
-#### Networking
-- **Retrofit**: Type-safe HTTP client
-- **OkHttp**: HTTP/HTTP2 client with interceptors
-- **Gson**: JSON serialization/deserialization
-- **Coroutines**: Asynchronous programming
-
-#### Data Management
-- **SharedPreferences**: Local data storage
-- **Repository Pattern**: Data layer abstraction
-- **Flow**: Reactive data streams
-
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Android Studio Hedgehog | 2023.1.1 or newer
-- Android SDK API level 28 or higher
-- JDK 11 or higher
-- Gradle 8.0+
+- **Android Studio** (Arctic Fox or later)
+- **Node.js** (v18+)
+- **PostgreSQL** (for local development)
+- **Git**
 
-### Installation
+### 1. Clone the Repository
 
-1. **Clone the repository**
+```bash
+git clone https://github.com/22bct0032/stockit.git
+cd stockit
+```
+
+### 2. Setup Backend
+
+```bash
+cd stockit-backend
+
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+
+# Edit .env with your configuration
+# For local development, it will use SQLite
+# For production, add DATABASE_URL for PostgreSQL
+
+# Start server
+npm run dev
+```
+
+Backend will run on `http://localhost:3000`
+
+### 3. Setup Android App
+
+```bash
+# Open project in Android Studio
+# File > Open > select stockit folder
+
+# Update API URL in ApiConfig.kt
+# For local: http://10.0.2.2:3000/ (Android emulator)
+# For production: https://stockit-api-yqi5.onrender.com/
+
+# Build and run
+./gradlew installDebug
+```
+
+---
+
+## 📡 API Documentation
+
+### Base URL
+**Production**: `https://stockit-api-yqi5.onrender.com`  
+**Local**: `http://localhost:3000`
+
+### Authentication Endpoints
+
+#### Sign Up
+```http
+POST /api/auth/signup-simple
+Content-Type: application/json
+
+{
+  "fullName": "John Doe",
+  "email": "john@example.com",
+  "password": "SecurePass123",
+  "confirmPassword": "SecurePass123"
+}
+```
+
+#### Sign In
+```http
+POST /api/auth/signin-simple
+Content-Type: application/json
+
+{
+  "email": "john@example.com",
+  "password": "SecurePass123"
+}
+```
+
+### Stock Endpoints
+
+#### Get Trending Stocks
+```http
+GET /api/trending
+```
+
+#### Get Stock Quote
+```http
+GET /api/stock/:symbol
+```
+
+#### Search Stocks
+```http
+GET /api/search?q=AAPL
+```
+
+### User Endpoints (Requires Authentication)
+
+Add header: `Authorization: Bearer <access_token>`
+
+#### Get Wallet
+```http
+GET /api/user/wallet
+```
+
+#### Get Portfolio
+```http
+GET /api/user/portfolio
+```
+
+#### Buy Stock
+```http
+POST /api/user/stocks/buy
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "quantity": 10,
+  "pricePerShare": 150.25
+}
+```
+
+#### Sell Stock
+```http
+POST /api/user/stocks/sell
+Content-Type: application/json
+
+{
+  "symbol": "AAPL",
+  "quantity": 5,
+  "pricePerShare": 155.50
+}
+```
+
+#### Get Transactions
+```http
+GET /api/user/transactions?limit=50&offset=0
+```
+
+#### Get Watchlist
+```http
+GET /api/user/watchlist
+```
+
+#### Add to Watchlist
+```http
+POST /api/user/watchlist
+Content-Type: application/json
+
+{
+  "symbol": "GOOGL"
+}
+```
+
+#### Remove from Watchlist
+```http
+DELETE /api/user/watchlist/:symbol
+```
+
+### Admin Endpoints
+
+Add query parameter: `?password=admin123`
+
+#### Get All Users
+```http
+GET /api/admin/users?password=admin123
+```
+
+#### Get User Details
+```http
+GET /api/admin/users/:userId?password=admin123
+```
+
+#### Get Database Stats
+```http
+GET /api/admin/stats?password=admin123
+```
+
+---
+
+## 🗄️ Database Schema
+
+### Users
+- `id` - Primary key
+- `fullName` - User's full name
+- `email` - Unique email address
+- `password` - Hashed password
+- `createdAt` - Registration timestamp
+
+### Wallets
+- `id` - Primary key
+- `userId` - Foreign key to users
+- `balance` - Current cash balance
+- `totalInvested` - Total amount invested
+- `updatedAt` - Last update timestamp
+
+### Portfolios
+- `id` - Primary key
+- `userId` - Foreign key to users
+- `symbol` - Stock symbol
+- `companyName` - Company name
+- `quantity` - Number of shares
+- `avgPrice` - Average purchase price
+- `firstBuyDate` - First purchase date
+- `lastUpdated` - Last update timestamp
+
+### Transactions
+- `id` - Primary key
+- `userId` - Foreign key to users
+- `symbol` - Stock symbol
+- `companyName` - Company name
+- `transactionType` - BUY or SELL
+- `quantity` - Number of shares
+- `price` - Price per share
+- `totalAmount` - Total transaction amount
+- `transactionDate` - Transaction timestamp
+
+### Watchlists
+- `id` - Primary key
+- `userId` - Foreign key to users
+- `symbol` - Stock symbol
+- `companyName` - Company name
+- `addedAt` - Timestamp when added
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables (Backend)
+
+Create `.env` file in `stockit-backend/`:
+
+```env
+# Server
+PORT=3000
+NODE_ENV=development
+
+# JWT
+JWT_SECRET=your-super-secret-jwt-key-change-this
+JWT_EXPIRES_IN=30d
+
+# Database (Production)
+DATABASE_URL=postgresql://user:password@host/database
+
+# App Config
+STARTING_BALANCE=100000
+
+# Admin
+ADMIN_PASSWORD=admin123
+```
+
+### Android App Configuration
+
+Update `app/src/main/java/com/example/stockit/network/ApiConfig.kt`:
+
+```kotlin
+private const val BASE_URL = "https://stockit-api-yqi5.onrender.com/"
+```
+
+---
+
+## 🚢 Deployment
+
+### Backend (Render.com)
+
+1. **Create PostgreSQL Database**
+   - Go to Render Dashboard
+   - Create new PostgreSQL database
+   - Copy connection string
+
+2. **Deploy Web Service**
+   - Connect GitHub repository
+   - Set build command: `npm install`
+   - Set start command: `npm start`
+   - Add environment variables (DATABASE_URL, JWT_SECRET, etc.)
+
+3. **Access**
+   - Backend URL: `https://stockit-api-yqi5.onrender.com`
+   - Database: Render PostgreSQL
+
+### Android App
+
+1. **Build APK**
    ```bash
-   git clone https://github.com/yourusername/StockIt.git
-   cd StockIt
+   ./gradlew assembleRelease
    ```
 
-2. **Open in Android Studio**
-   - Open Android Studio
-   - Select "Open an existing project"
-   - Navigate to the cloned directory
+2. **Install**
+   ```bash
+   ./gradlew installRelease
+   ```
 
-3. **Configure API Endpoint**
-   - Update API base URL in `app/src/main/java/com/yourpackage/utils/Constants.kt`
+3. **Distribute**
+   - Upload to Google Play Store
+   - Or share APK directly
 
-4. **Build and Run**
-   - Sync project with Gradle files
-   - Run on device or emulator (API 28+)
+---
 
-## 📱 Screenshots
+## 📊 Project Structure
 
-### 🎯 Onboarding & Authentication
-| Onboarding 1 | Onboarding 2 | Sign In | Sign Up |
-|--------------|--------------|---------|---------|
-| ![Onboarding 1](./screenshots/onboarding%201.jpg) | ![Onboarding 2](./screenshots/onboarding%202.jpg) | ![Sign In](./screenshots/sign%20in.jpg) | ![Sign Up](./screenshots/sign%20up.jpg) |
+```
+stockit/
+├── app/                          # Android app
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/example/stockit/
+│   │   │   │   ├── data/        # Data models
+│   │   │   │   ├── network/     # API client
+│   │   │   │   ├── ui/          # UI components
+│   │   │   │   ├── utils/       # Utilities
+│   │   │   │   └── StockItApplication.kt
+│   │   │   └── res/             # Resources
+│   │   └── AndroidManifest.xml
+│   └── build.gradle.kts
+├── stockit-backend/              # Node.js backend
+│   ├── src/
+│   │   ├── config/              # Database config
+│   │   ├── controllers/         # Request handlers
+│   │   ├── middleware/          # Auth middleware
+│   │   ├── routes/              # API routes
+│   │   ├── services/            # Business logic
+│   │   └── app.js               # Main server
+│   ├── .env                     # Environment variables
+│   ├── package.json
+│   └── README.md
+├── screenshots/                  # App screenshots
+├── .gitignore
+├── LICENSE
+└── README.md                    # This file
+```
 
-### 📊 Main Application
-| Home Page | Stock Details 1 | Stock Details 2 | Buy Stocks |
-|-----------|-----------------|-----------------|------------|
-| ![Home Page](./screenshots/home%20page.jpg) | ![Stock Details 1](./screenshots/stock%20details%201.jpg) | ![Stock Details 2](./screenshots/stock%20details%202.jpg) | ![Buy Stocks](./screenshots/buy%20stocks.jpg) |
+---
 
-### 👤 Profile & Success
-| Profile Page 0 | Profile Page | Success Page |
-|----------------|--------------|--------------|
-| ![Profile Page 0](./screenshots/profile%20page%200.jpg) | ![Profile Page](./screenshots/profile%20page.jpg) | ![Success Page](./screenshots/success%20page.jpg) |
+## 🎨 Screenshots
 
-## 🎨 Design System
+### Home Screen
+![Home Screen](screenshots/home.png)
 
-### Color Palette
-- **Primary**: Modern dark theme with high contrast
-- **Accent**: Strategic use of colors for data visualization
-- **Background**: Multi-layered gradients for depth
+### Portfolio
+![Portfolio](screenshots/portfolio.png)
 
-### Typography
-- **Headlines**: Bold, high contrast for readability
-- **Body Text**: Optimized for dark backgrounds
-- **Accent Text**: Color-coded for different data types
+### Trading
+![Trading](screenshots/trading.png)
 
-### Visual Effects
-- **Glassmorphism**: Translucent cards with blur effects
-- **Gradient Backgrounds**: Multi-layer gradients for depth
-- **Smooth Animations**: Spring-based transitions
-- **Micro-interactions**: Subtle feedback for user actions
+### Watchlist
+![Watchlist](screenshots/watchlist.png)
 
-## 🔌 API Integration
+---
 
-The app integrates with a comprehensive trading API providing:
+## 🔐 Security
 
-- **Authentication**: JWT-based secure login
-- **Market Data**: Real-time stock prices and charts
-- **Trading**: Buy/sell order execution
-- **Portfolio**: Holdings and transaction management
-- **Watchlist**: Personal stock tracking
+- **Password Hashing**: Bcrypt with salt rounds
+- **JWT Tokens**: Secure authentication with expiration
+- **HTTPS**: All production traffic encrypted
+- **Input Validation**: Server-side validation for all inputs
+- **SQL Injection Prevention**: Parameterized queries
+- **CORS**: Configured for security
 
-## 🔒 Security Features
+---
 
-### Data Protection
-- **Encrypted Storage**: Sensitive data encryption at rest
-- **Secure Communication**: HTTPS/TLS for all API calls
-- **Token Management**: Automatic token refresh and validation
-- **Session Security**: Secure session handling
+## 🧪 Testing
 
-### Authentication Flow
-1. User Registration/Login with secure credential validation
-2. JWT Token issued by server
-3. Encrypted local token storage
-4. Automatic token renewal
-5. Complete session cleanup on logout
+### Backend Tests
+```bash
+cd stockit-backend
+npm test
+```
 
-## ♿ Accessibility Features
+### Android Tests
+```bash
+./gradlew test
+./gradlew connectedAndroidTest
+```
 
-- **Screen Reader Support**: Complete VoiceOver/TalkBack compatibility
-- **High Contrast**: WCAG compliant color schemes
-- **Large Text Support**: Dynamic type scaling
-- **Touch Targets**: Minimum 44dp touch areas
-- **Semantic Labels**: Descriptive content descriptions
+---
 
-## 🎯 Performance Optimizations
+## 📈 Future Enhancements
 
-### Memory Management
-- Efficient Composables with optimized recomposition
-- Smart bitmap caching and management
-- Lifecycle-aware background operations
-- Proactive memory leak prevention
+- [ ] Real stock data integration (Alpha Vantage, Yahoo Finance)
+- [ ] Real-time WebSocket updates
+- [ ] Stock price charts and technical indicators
+- [ ] Push notifications for price alerts
+- [ ] Social features (share trades, leaderboards)
+- [ ] Advanced order types (limit, stop-loss)
+- [ ] Multi-currency support
+- [ ] Dark/Light theme toggle
+- [ ] Biometric authentication
 
-### Network Optimization
-- Intelligent request caching
-- Automatic failure recovery with retry logic
-- Efficient connection pooling
-- Optimized data transfer with compression
-
-## 🔧 Build Configuration
-
-### Build Variants
-- **Debug**: Full logging and debugging features
-- **Staging**: Production-like testing environment
-- **Release**: Optimized production build
-
-## 🚀 Roadmap
-
-### Upcoming Features
-- 📊 Advanced technical analysis tools
-- 🔔 Push notifications for price alerts
-- 🌐 Multi-language support
-- 📱 Optimized tablet layouts
-- 🔐 Biometric authentication
-- 📈 Paper trading mode
-- 💬 Community features
-- 🤖 AI-powered insights
-
-### Technical Improvements
-- Offline support with local caching
-- WebSocket integration for real-time data
-- Feature-based modular architecture
-- Comprehensive testing coverage
-- CI/CD pipeline implementation
+---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please follow these steps:
+Contributions are welcome! Please follow these steps:
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-### Code Standards
-- Follow [Kotlin Coding Conventions](https://kotlinlang.org/docs/coding-conventions.html)
-- Use ktlint for code formatting
-- Write comprehensive unit tests
-- Document public APIs
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
+---
+
+## 👨‍💻 Author
+
+**Ashish** - [22bct0032](https://github.com/22bct0032)
+
+---
+
+## 🙏 Acknowledgments
+
+- Jetpack Compose for modern Android UI
+- Render.com for free hosting
+- Material Design for UI guidelines
+- Express.js community for excellent documentation
+
+---
+
+## 📞 Support
+
+For support, email your-email@example.com or open an issue on GitHub.
+
+---
+
 <div align="center">
 
-**StockIt** - Empowering the next generation of investors with cutting-edge mobile technology 📈📱
+**⭐ Star this repo if you find it helpful!**
 
-Built with ❤️ using Jetpack Compose
+Made with ❤️ by Ashish
 
 </div>

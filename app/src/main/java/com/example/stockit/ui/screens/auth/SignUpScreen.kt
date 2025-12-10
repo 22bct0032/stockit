@@ -675,7 +675,19 @@ suspend fun signUpUser(
         }
         onError(errorMessage)
     } catch (e: Exception) {
-        onError("Network error: ${e.message}")
+        android.util.Log.e("SignUpError", "Full error details:", e)
+        val detailedError = when {
+            e is java.net.UnknownHostException -> "Cannot reach server. Check internet connection."
+            e is javax.net.ssl.SSLException -> "SSL Error: ${e.message?.take(100)}"
+            e is javax.net.ssl.SSLHandshakeException -> "SSL Handshake failed. Server certificate issue."
+            e is java.net.SocketTimeoutException -> "Connection timeout. Server might be down."
+            e.message?.contains("SSL", ignoreCase = true) == true -> 
+                "SSL certificate error. Contact server administrator."
+            e.message?.contains("UNRECOGNIZED_NAME", ignoreCase = true) == true ->
+                "Server SSL certificate name mismatch."
+            else -> "Network error: ${e.javaClass.simpleName} - ${e.message?.take(100)}"
+        }
+        onError(detailedError)
     } finally {
         onLoading(false)
     }
