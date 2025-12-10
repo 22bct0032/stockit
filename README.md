@@ -11,7 +11,7 @@
 
 A modern, production-ready stock trading application with a beautiful Android frontend and robust Node.js backend, featuring real-time market data, portfolio management, and secure authentication.
 
-[Features](#-features) • [Tech Stack](#-tech-stack) • [Setup](#-setup) • [API Documentation](#-api-documentation) • [Screenshots](#-screenshots)
+[Features](#-features) • [Tech Stack](#-tech-stack) • [Setup](#-setup) • [API Documentation](#-api-documentation)
 
 </div>
 
